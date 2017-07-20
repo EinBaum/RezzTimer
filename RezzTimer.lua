@@ -3,15 +3,10 @@ local name = "RezzTimer"
 local version = "1.0.0"
 
 local list = {}
-local numentries = 0
 local f = CreateFrame("frame")
 local d = CreateFrame("frame")
 local dt = d:CreateFontString()
 local lasttime = 0
-
-local p = function(m)
-	DEFAULT_CHAT_FRAME:AddMessage(m)
-end
 
 local tablelength = function(T)
 	local count = 0
@@ -55,8 +50,6 @@ RT_parse = function(name, data)
 		return
 	end
 
-	--p("recv parse " .. name .. ": " .. data)
-
 	if data == 0 then
 		list[name] = nil
 	else
@@ -68,7 +61,6 @@ RT_parse = function(name, data)
 end
 
 RT_send = function(data)
-	--p("sending " .. data)
 	SendAddonMessage(name, data, "RAID")
 end
 
@@ -96,7 +88,6 @@ RT_update = function()
 	local dif = curtime - lasttime
 	if dif >= 1 then
 		lasttime = curtime
-		--p("<update>")
 		RT_updatelist(dif)
 	end
 end
@@ -119,10 +110,8 @@ f:SetScript("OnEvent", function()
 			RT_inform()
 		end
 	elseif event == "PLAYER_DEAD" then
-		--p("event dead")
 		RT_inform()
 	elseif event == "PLAYER_ALIVE" then
-		--p("event alive")
 		RT_inform()
 	elseif event == "CHAT_MSG_ADDON" then
 		RT_recv(arg1, arg2, arg3, arg4)
